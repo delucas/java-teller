@@ -1,0 +1,104 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'cobertura'
+apply plugin: 'checkstyle'
+
+// Configuración
+
+sourceCompatibility = 1.7
+version = '0.1'
+test.ignoreFailures = true
+
+defaultTasks 'clean', 'compileJava', 'test', 'cobertura', 'checkstyleMain', 'pmd'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    pmdConf
+}
+
+sourceSets {
+    acceptanceTest {
+        java.srcDir file('src/acceptance-tests/java')
+        resources.srcDir file('src/acceptance-tests/resources')
+    }
+}
+
+dependencies {
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+	compile 'com.github.jknack:handlebars:1.0.0'
+
+    testCompile 'junit:junit:4.+'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '1.2.1'
+    pmdConf group: 'pmd', name: 'pmd', version: '4.3'
+
+    acceptanceTestCompile sourceSets.main.output
+    acceptanceTestCompile configurations.testCompile
+    acceptanceTestCompile sourceSets.test.output
+    acceptanceTestRuntime configurations.testRuntime
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.saliman', name: 'gradle-cobertura-plugin', version: '2.2.2'
+    }
+}
+
+// Tareas
+
+task acceptanceTest(type: Test) {
+    description = "Corre los tests de aceptación"
+    testClassesDir = sourceSets.acceptanceTest.output.classesDir
+    classpath = sourceSets.acceptanceTest.runtimeClasspath
+    acceptanceTest.reports.html.destination = file("$buildDir/reports/acceptance-tests")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.9'
+}
+
+checkstyle {
+    configFile = new File(rootDir, "src/test/resources/sun_checks.xml")
+    ignoreFailures = true
+}
+
+cobertura {
+    coverageFormats = ['html', 'xml']
+}
+
+task pmd (dependsOn: compileJava) << {
+    println 'Running PMD/CPD static code analysis'
+    ant {
+        if (!buildDir.isDirectory()) {
+            buildDir.mkdirs()
+        }
+        reportFolder = new File(rootDir, "build/reports/pmd-cpd")
+        if (!reportFolder.isDirectory()) {
+            reportFolder.mkdirs()
+        }
+        taskdef(name: 'pmd', classname: 'net.sourceforge.pmd.ant.PMDTask', classpath: configurations.pmdConf.asPath)
+        taskdef(name: 'cpd', classname: 'net.sourceforge.pmd.cpd.CPDTask', classpath: configurations.pmdConf.asPath)
+
+        pmd(shortFilenames: 'true',
+            failonruleviolation: 'false',
+            rulesetfiles: 'rulesets/basic.xml, rulesets/braces.xml, rulesets/clone.xml, rulesets/coupling.xml, rulesets/codesize.xml, rulesets/design.xml, rulesets/migrating.xml, rulesets/naming.xml, rulesets/strictexception.xml, rulesets/strings.xml, rulesets/unusedcode.xml') {
+                formatter(type: 'xml', toFile: 'build/reports/pmd-cpd/pmd.xml')
+                fileset(dir: "src/main/java") {
+                    include(name: '**/*.java')
+                }
+        }
+        cpd(minimumTokenCount: 30, format: 'xml',
+            ignoreLiterals: 'true',
+            ignoreIdentifiers: 'true',
+            outputFile: 'build/reports/pmd-cpd/cpd.xml') {
+            fileSet(dir: "src/main/java") {
+                include(name: '**/*.java')
+            }
+        }
+    }
+}
