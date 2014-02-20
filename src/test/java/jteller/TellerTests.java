@@ -1,7 +1,7 @@
 package jteller;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import jteller.stubs.Perro;
 
@@ -25,5 +25,4 @@ public class TellerTests {
 		Teller teller = new Teller(Perro.class);
 		assertThat(teller.obtenerPaquete(), is("jteller.stubs"));
 	}
-
 }
