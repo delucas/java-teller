@@ -1,9 +1,15 @@
-Voy a describirte el aspecto externo que tiene cualquier Perro:
+Voy a describirte el aspecto externo que tiene cualquier {{clase.nombre}}:
 
-* Un Perro extiende el comportamiento de un Mamifero, por lo que es posibile utilizar un Perro en cualquier sitio donde se requiera un Mamifero.
+* Todo objeto del tipo {{clase.nombre}} es una especialización de {{clase.superclase.nombre}}, por lo que es posibile utilizar un {{clase.nombre}} en cualquier sitio donde se requiera un {{clase.superclase.nombre}}.
 
-* Un Perro puede crearse sin necesidad de proporcionar ninguna información adicional.
-* Un Perro puede crearse proporcionando un String llamado raza como parámetro.
+{{#each clase.constructores}}
+{{#unless argumentos}}
+* Todo objeto del tipo {{clase.nombre}} puede crearse sin necesidad de proporcionar ninguna información adicional.
+{{/unless}}
+{{#if argumentos}}
+* Todo objeto del tipo {{clase.nombre}} puede crearse proporcionando como información los siguientes tipos de campos:
+{{#each argumentos}}    - {{this}}{{/each}}
+{{/if}}{{/each}}
 
-* Un Perro reacciona al mensaje obtenerRaza, el cual no requiere parámetros y retorna un String.
-* Un Perro reacciona al mensaje establecerRaza, el cual requiere como parámetro un String y no retorna ningún valor.
+// * Todo objeto del tipo {{clase.nombre}} reacciona al mensaje obtenerRaza, el cual no requiere parámetros y retorna un String.
+// * Todo objeto del tipo {{clase.nombre}} reacciona al mensaje establecerRaza, el cual requiere como parámetro un String y no retorna ningún valor.
