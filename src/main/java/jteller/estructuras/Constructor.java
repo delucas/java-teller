@@ -8,7 +8,7 @@ public class Constructor {
 
 	public Constructor() { }
 
-	public Constructor(String ... argumentos) {
+	public Constructor(final String ... argumentos) {
 		for (String argumento : argumentos) {
 			this.argumentos.add(argumento);
 		}

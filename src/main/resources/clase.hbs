@@ -1,15 +1,9 @@
 Voy a describirte el aspecto externo que tiene cualquier {{clase.nombre}}:
 
-* Todo objeto del tipo {{clase.nombre}} es una especialización de {{clase.superclase.nombre}}, por lo que es posibile utilizar un {{clase.nombre}} en cualquier sitio donde se requiera un {{clase.superclase.nombre}}.
-
+{{#if clase.superclase}}Todo objeto del tipo {{clase.nombre}} es una especialización de {{clase.superclase.nombre}}, por lo que es posibile utilizar un {{clase.nombre}} en cualquier sitio donde se requiera un {{clase.superclase.nombre}}.{{/if}}
 {{#each clase.constructores}}
-{{#unless argumentos}}
-* Todo objeto del tipo {{clase.nombre}} puede crearse sin necesidad de proporcionar ninguna información adicional.
-{{/unless}}
-{{#if argumentos}}
-* Todo objeto del tipo {{clase.nombre}} puede crearse proporcionando como información los siguientes tipos de campos:
-{{#each argumentos}}    - {{this}}{{/each}}
-{{/if}}{{/each}}
-
-// * Todo objeto del tipo {{clase.nombre}} reacciona al mensaje obtenerRaza, el cual no requiere parámetros y retorna un String.
-// * Todo objeto del tipo {{clase.nombre}} reacciona al mensaje establecerRaza, el cual requiere como parámetro un String y no retorna ningún valor.
+{{#unless argumentos}}Todo objeto del tipo {{clase.nombre}} puede crearse sin necesidad de proporcionar ninguna información adicional.{{/unless}}{{#if argumentos}}Todo objeto del tipo {{clase.nombre}} puede crearse proporcionando como información los siguientes tipos de campos:
+{{#each argumentos}}    - {{this}}{{/each}}{{/if}}{{/each}}
+{{#each clase.metodos}}
+Todo objeto del tipo {{clase.nombre}} reacciona al mensaje {{nombre}}, el cual retorna {{tipoRetorno}}{{#unless parametros}} y no requiere parámetros{{/unless}}{{#if parametros}} y requiere como parámetros:
+{{#each parametros}}    - {{this}}{{/each}}{{/if}}.{{/each}}
