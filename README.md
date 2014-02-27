@@ -1,5 +1,8 @@
 # java-teller
 
+![Teller](http://www.jewornotjew.com/img/people/t/teller.jpg "Teller")
+> *java-teller* recibe el nombre del famoso mago, del dúo [Penn and Teller](http://en.wikipedia.org/wiki/Penn_%26_Teller).
+
 `java-teller` es un utilitario para programadores que están dando sus primeros pasos. Leerá la descripción externa de una clase, para poder comprobar si las interpretaciones son correctas.
 
 [![Historias en Ready](https://badge.waffle.io/delucas/java-teller.png?label=ready)](https://waffle.io/delucas/java-teller)  
